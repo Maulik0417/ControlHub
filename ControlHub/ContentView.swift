@@ -1,24 +1,19 @@
-//
-//  ContentView.swift
-//  ControlHub
-//
-//  Created by Maulik Mann on 2025-04-29.
-//
-
 import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        VStack(spacing: 12) {
+            Text("Control Hub")
+                .font(.title2)
+                .bold()
+
+            Text("Coming soon: Clipboard, Network, Notes")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+
+            Spacer()
         }
         .padding()
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
-}
-
-#Preview {
-    ContentView()
 }

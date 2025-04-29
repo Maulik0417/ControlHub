@@ -1,65 +1,72 @@
+import Foundation
 import AppKit
 
+enum ClipboardItem: Hashable {
+    case text(String)
+    case file(URL)
+
+    var displayName: String {
+        switch self {
+        case .text(let string):
+            return string
+        case .file(let url):
+            return url.lastPathComponent
+        }
+    }
+}
+
 class ClipboardManager: ObservableObject {
-    @Published var history: [String] = []
-    private var timer: Timer?
-    private var lastChangeCount: Int = NSPasteboard.general.changeCount
+    @Published var history: [ClipboardItem] = []
+
+    private let pasteboard = NSPasteboard.general
+    private var lastItem: ClipboardItem?
 
     init() {
-        startMonitoring()
-    }
-
-    func startMonitoring() {
-        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
+        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
             self.checkClipboard()
         }
     }
 
-    private func checkClipboard() {
-        let pasteboard = NSPasteboard.general
-        if pasteboard.changeCount != lastChangeCount {
-            lastChangeCount = pasteboard.changeCount
-            
-            guard let copiedString = pasteboard.string(forType: .string),
-                  !copiedString.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
-                  copiedString != history.first else { return }
-            
-            DispatchQueue.main.async {
-                self.history.removeAll { $0 == copiedString } // ✅ remove duplicates
-                self.history.insert(copiedString, at: 0)
-                if self.history.count > 10 {
-                    self.history.removeLast()
+    func checkClipboard() {
+        if let types = pasteboard.types {
+            if types.contains(.fileURL),
+               let items = pasteboard.pasteboardItems {
+                for item in items {
+                    if let filePath = item.string(forType: .fileURL),
+                       let url = URL(string: filePath),
+                       url.isFileURL {
+                        let newItem = ClipboardItem.file(url)
+                        if newItem != lastItem {
+                            lastItem = newItem
+                            DispatchQueue.main.async {
+                                self.history.insert(newItem, at: 0)
+                            }
+                        }
+                    }
+                }
+            } else if let copiedString = pasteboard.string(forType: .string) {
+                let newItem = ClipboardItem.text(copiedString)
+                if newItem != lastItem {
+                    lastItem = newItem
+                    DispatchQueue.main.async {
+                        self.history.insert(newItem, at: 0)
+                    }
                 }
             }
         }
     }
 
-    func copyToClipboard(_ string: String) {
-        let pasteboard = NSPasteboard.general
+    func copyToClipboard(_ item: ClipboardItem) {
         pasteboard.clearContents()
-        pasteboard.setString(string, forType: .string)
-    }
-    
-    func clearClipboard() {
-        history.removeAll()
-    }
-    
-    enum ClipboardItem: Hashable {
-        case text(String)
-        case file(URL)
-
-        var displayName: String {
-            switch self {
-            case .text(let string):
-                return string
-            case .file(let url):
-                return url.lastPathComponent
-            }
+        switch item {
+        case .text(let string):
+            pasteboard.setString(string, forType: .string)
+        case .file(let url):
+            pasteboard.writeObjects([url as NSURL])
         }
     }
 
-    deinit {
-        timer?.invalidate()
+    func clearClipboard() {
+        history.removeAll()
     }
 }
-
