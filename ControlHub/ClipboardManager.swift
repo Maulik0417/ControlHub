@@ -40,6 +40,7 @@ class ClipboardManager: ObservableObject {
                             lastItem = newItem
                             DispatchQueue.main.async {
                                 self.history.insert(newItem, at: 0)
+                                self.limitHistory()
                             }
                         }
                     }
@@ -50,6 +51,7 @@ class ClipboardManager: ObservableObject {
                     lastItem = newItem
                     DispatchQueue.main.async {
                         self.history.insert(newItem, at: 0)
+                        self.limitHistory()
                     }
                 }
             }
@@ -68,5 +70,11 @@ class ClipboardManager: ObservableObject {
 
     func clearClipboard() {
         history.removeAll()
+    }
+
+    private func limitHistory() {
+        if history.count > 20 {
+            history.removeLast()
+        }
     }
 }
