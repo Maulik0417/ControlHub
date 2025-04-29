@@ -1,0 +1,546 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXContainerItemProxy section */
+		4DAE46742DC1707800C91E48 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4DAE465D2DC1707700C91E48 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4DAE46642DC1707700C91E48;
+			remoteInfo = ControlHub;
+		};
+		4DAE467E2DC1707800C91E48 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4DAE465D2DC1707700C91E48 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4DAE46642DC1707700C91E48;
+			remoteInfo = ControlHub;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		4DAE46652DC1707700C91E48 /* ControlHub.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ControlHub.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4DAE46732DC1707800C91E48 /* ControlHubTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ControlHubTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4DAE467D2DC1707800C91E48 /* ControlHubUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ControlHubUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		4DAE46672DC1707700C91E48 /* ControlHub */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = ControlHub;
+			sourceTree = "<group>";
+		};
+		4DAE46762DC1707800C91E48 /* ControlHubTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = ControlHubTests;
+			sourceTree = "<group>";
+		};
+		4DAE46802DC1707800C91E48 /* ControlHubUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = ControlHubUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4DAE46622DC1707700C91E48 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4DAE46702DC1707800C91E48 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4DAE467A2DC1707800C91E48 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4DAE465C2DC1707700C91E48 = {
+			isa = PBXGroup;
+			children = (
+				4DAE46672DC1707700C91E48 /* ControlHub */,
+				4DAE46762DC1707800C91E48 /* ControlHubTests */,
+				4DAE46802DC1707800C91E48 /* ControlHubUITests */,
+				4DAE46662DC1707700C91E48 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		4DAE46662DC1707700C91E48 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4DAE46652DC1707700C91E48 /* ControlHub.app */,
+				4DAE46732DC1707800C91E48 /* ControlHubTests.xctest */,
+				4DAE467D2DC1707800C91E48 /* ControlHubUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4DAE46642DC1707700C91E48 /* ControlHub */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4DAE46872DC1707800C91E48 /* Build configuration list for PBXNativeTarget "ControlHub" */;
+			buildPhases = (
+				4DAE46612DC1707700C91E48 /* Sources */,
+				4DAE46622DC1707700C91E48 /* Frameworks */,
+				4DAE46632DC1707700C91E48 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				4DAE46672DC1707700C91E48 /* ControlHub */,
+			);
+			name = ControlHub;
+			packageProductDependencies = (
+			);
+			productName = ControlHub;
+			productReference = 4DAE46652DC1707700C91E48 /* ControlHub.app */;
+			productType = "com.apple.product-type.application";
+		};
+		4DAE46722DC1707800C91E48 /* ControlHubTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4DAE468A2DC1707800C91E48 /* Build configuration list for PBXNativeTarget "ControlHubTests" */;
+			buildPhases = (
+				4DAE466F2DC1707800C91E48 /* Sources */,
+				4DAE46702DC1707800C91E48 /* Frameworks */,
+				4DAE46712DC1707800C91E48 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4DAE46752DC1707800C91E48 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				4DAE46762DC1707800C91E48 /* ControlHubTests */,
+			);
+			name = ControlHubTests;
+			packageProductDependencies = (
+			);
+			productName = ControlHubTests;
+			productReference = 4DAE46732DC1707800C91E48 /* ControlHubTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		4DAE467C2DC1707800C91E48 /* ControlHubUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4DAE468D2DC1707800C91E48 /* Build configuration list for PBXNativeTarget "ControlHubUITests" */;
+			buildPhases = (
+				4DAE46792DC1707800C91E48 /* Sources */,
+				4DAE467A2DC1707800C91E48 /* Frameworks */,
+				4DAE467B2DC1707800C91E48 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4DAE467F2DC1707800C91E48 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				4DAE46802DC1707800C91E48 /* ControlHubUITests */,
+			);
+			name = ControlHubUITests;
+			packageProductDependencies = (
+			);
+			productName = ControlHubUITests;
+			productReference = 4DAE467D2DC1707800C91E48 /* ControlHubUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4DAE465D2DC1707700C91E48 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1630;
+				LastUpgradeCheck = 1630;
+				TargetAttributes = {
+					4DAE46642DC1707700C91E48 = {
+						CreatedOnToolsVersion = 16.3;
+					};
+					4DAE46722DC1707800C91E48 = {
+						CreatedOnToolsVersion = 16.3;
+						TestTargetID = 4DAE46642DC1707700C91E48;
+					};
+					4DAE467C2DC1707800C91E48 = {
+						CreatedOnToolsVersion = 16.3;
+						TestTargetID = 4DAE46642DC1707700C91E48;
+					};
+				};
+			};
+			buildConfigurationList = 4DAE46602DC1707700C91E48 /* Build configuration list for PBXProject "ControlHub" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 4DAE465C2DC1707700C91E48;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 4DAE46662DC1707700C91E48 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4DAE46642DC1707700C91E48 /* ControlHub */,
+				4DAE46722DC1707800C91E48 /* ControlHubTests */,
+				4DAE467C2DC1707800C91E48 /* ControlHubUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4DAE46632DC1707700C91E48 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4DAE46712DC1707800C91E48 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4DAE467B2DC1707800C91E48 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4DAE46612DC1707700C91E48 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4DAE466F2DC1707800C91E48 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4DAE46792DC1707800C91E48 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4DAE46752DC1707800C91E48 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4DAE46642DC1707700C91E48 /* ControlHub */;
+			targetProxy = 4DAE46742DC1707800C91E48 /* PBXContainerItemProxy */;
+		};
+		4DAE467F2DC1707800C91E48 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4DAE46642DC1707700C91E48 /* ControlHub */;
+			targetProxy = 4DAE467E2DC1707800C91E48 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		4DAE46852DC1707800C91E48 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.4;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		4DAE46862DC1707800C91E48 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.4;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		4DAE46882DC1707800C91E48 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = ControlHub/ControlHub.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "Maulik-Mann.ControlHub";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		4DAE46892DC1707800C91E48 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = ControlHub/ControlHub.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "Maulik-Mann.ControlHub";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		4DAE468B2DC1707800C91E48 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "Maulik-Mann.ControlHubTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ControlHub.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ControlHub";
+			};
+			name = Debug;
+		};
+		4DAE468C2DC1707800C91E48 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "Maulik-Mann.ControlHubTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ControlHub.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ControlHub";
+			};
+			name = Release;
+		};
+		4DAE468E2DC1707800C91E48 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "Maulik-Mann.ControlHubUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = ControlHub;
+			};
+			name = Debug;
+		};
+		4DAE468F2DC1707800C91E48 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "Maulik-Mann.ControlHubUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = ControlHub;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4DAE46602DC1707700C91E48 /* Build configuration list for PBXProject "ControlHub" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4DAE46852DC1707800C91E48 /* Debug */,
+				4DAE46862DC1707800C91E48 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4DAE46872DC1707800C91E48 /* Build configuration list for PBXNativeTarget "ControlHub" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4DAE46882DC1707800C91E48 /* Debug */,
+				4DAE46892DC1707800C91E48 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4DAE468A2DC1707800C91E48 /* Build configuration list for PBXNativeTarget "ControlHubTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4DAE468B2DC1707800C91E48 /* Debug */,
+				4DAE468C2DC1707800C91E48 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4DAE468D2DC1707800C91E48 /* Build configuration list for PBXNativeTarget "ControlHubUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4DAE468E2DC1707800C91E48 /* Debug */,
+				4DAE468F2DC1707800C91E48 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 4DAE465D2DC1707700C91E48 /* Project object */;
+}
