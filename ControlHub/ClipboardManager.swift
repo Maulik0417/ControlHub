@@ -1,7 +1,7 @@
 import Foundation
 import AppKit
 
-enum ClipboardItem: Hashable, Codable {
+enum ClipboardItem: Hashable {
     case text(String)
     case file(URL)
 
@@ -14,74 +14,79 @@ enum ClipboardItem: Hashable, Codable {
         }
     }
 
-    enum CodingKeys: String, CodingKey {
-        case type, value
-    }
-
-    enum ItemType: String, Codable {
-        case text, file
-    }
-
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        let type = try container.decode(ItemType.self, forKey: .type)
-        switch type {
-        case .text:
-            let string = try container.decode(String.self, forKey: .value)
-            self = .text(string)
-        case .file:
-            let url = try container.decode(URL.self, forKey: .value)
-            self = .file(url)
-        }
-    }
-
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
+    func toDict() -> [String: Any] {
         switch self {
         case .text(let string):
-            try container.encode(ItemType.text, forKey: .type)
-            try container.encode(string, forKey: .value)
+            return ["type": "text", "value": string]
         case .file(let url):
-            try container.encode(ItemType.file, forKey: .type)
-            try container.encode(url, forKey: .value)
+            if let bookmark = try? url.bookmarkData(options: [.withSecurityScope],
+                                                    includingResourceValuesForKeys: nil,
+                                                    relativeTo: nil) {
+                return ["type": "file", "bookmark": bookmark.base64EncodedString()]
+            } else {
+                return [:]
+            }
         }
+    }
+
+    static func fromDict(_ dict: [String: Any]) -> ClipboardItem? {
+        guard let type = dict["type"] as? String else { return nil }
+
+        switch type {
+        case "text":
+            if let string = dict["value"] as? String {
+                return .text(string)
+            }
+
+        case "file":
+            if let base64 = dict["bookmark"] as? String,
+               let data = Data(base64Encoded: base64) {
+                var isStale = false
+                if let url = try? URL(resolvingBookmarkData: data,
+                                      options: [.withSecurityScope],
+                                      bookmarkDataIsStale: &isStale),
+                   !isStale {
+                    _ = url.startAccessingSecurityScopedResource()
+                    return .file(url)
+                }
+            }
+
+        default:
+            return nil
+        }
+
+        return nil
     }
 }
 
 class ClipboardManager: ObservableObject {
-    @Published var history: [ClipboardItem] = [] {
-        didSet {
-            saveHistory()
-        }
-    }
+    @Published var history: [ClipboardItem] = []
 
     private let pasteboard = NSPasteboard.general
     private var lastItem: ClipboardItem?
+    private var suppressNextUpdate = false
 
-    private let historyFileName = "clipboard_history.json"
-
-    private var historyFileURL: URL {
-        let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-        let directory = appSupport.appendingPathComponent("ControlHub", isDirectory: true)
-
-        if !FileManager.default.fileExists(atPath: directory.path) {
-            try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
-        }
-
-        return directory.appendingPathComponent(historyFileName)
-    }
+    private let historyFileURL: URL = {
+        let appSupportDir = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
+        let dir = appSupportDir.appendingPathComponent("ControlHub", isDirectory: true)
+        try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+        return dir.appendingPathComponent("clipboard_history.json")
+    }()
 
     init() {
         loadHistory()
-        if let first = history.first {
-            lastItem = first
-        }
+
         Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
             self.checkClipboard()
         }
     }
 
     func checkClipboard() {
+        guard !suppressNextUpdate else {
+            suppressNextUpdate = false
+            return
+        }
+
         if let types = pasteboard.types {
             if types.contains(.fileURL),
                let items = pasteboard.pasteboardItems {
@@ -93,10 +98,7 @@ class ClipboardManager: ObservableObject {
                         if newItem != lastItem {
                             lastItem = newItem
                             DispatchQueue.main.async {
-                                self.history.removeAll { $0 == newItem }
-                                self.history.insert(newItem, at: 0)
-                                self.limitHistory()
-                                self.saveHistory()
+                                self.insertOrMoveToTop(newItem)
                             }
                         }
                     }
@@ -106,10 +108,7 @@ class ClipboardManager: ObservableObject {
                 if newItem != lastItem {
                     lastItem = newItem
                     DispatchQueue.main.async {
-                        self.history.removeAll { $0 == newItem }
-                        self.history.insert(newItem, at: 0)
-                        self.limitHistory()
-                        self.saveHistory()
+                        self.insertOrMoveToTop(newItem)
                     }
                 }
             }
@@ -117,17 +116,42 @@ class ClipboardManager: ObservableObject {
     }
 
     func copyToClipboard(_ item: ClipboardItem) {
+        suppressNextUpdate = true
         pasteboard.clearContents()
+
         switch item {
         case .text(let string):
             pasteboard.setString(string, forType: .string)
+
         case .file(let url):
-            pasteboard.writeObjects([url as NSURL])
+            guard FileManager.default.fileExists(atPath: url.path) else {
+                print("❌ File no longer exists at path: \(url.path)")
+                return
+            }
+
+            let success = pasteboard.writeObjects([url as NSURL])
+            if !success {
+                print("❌ Failed to write file URL to pasteboard")
+            } else {
+                print("✅ File URL copied to pasteboard: \(url)")
+            }
         }
+
+        insertOrMoveToTop(item)
     }
 
     func clearClipboard() {
         history.removeAll()
+        saveHistory()
+    }
+
+    private func insertOrMoveToTop(_ item: ClipboardItem) {
+        if let existingIndex = history.firstIndex(of: item) {
+            history.remove(at: existingIndex)
+        }
+        history.insert(item, at: 0)
+        limitHistory()
+        saveHistory()
     }
 
     private func limitHistory() {
@@ -136,24 +160,19 @@ class ClipboardManager: ObservableObject {
         }
     }
 
-    // MARK: - Persistence
-
     private func saveHistory() {
-        do {
-            let data = try JSONEncoder().encode(history)
-            try data.write(to: historyFileURL)
-        } catch {
-            print("Failed to save clipboard history: \(error)")
+        let dictArray = history.map { $0.toDict() }
+        if let data = try? JSONSerialization.data(withJSONObject: dictArray) {
+            try? data.write(to: historyFileURL)
         }
     }
 
     private func loadHistory() {
-        do {
-            let data = try Data(contentsOf: historyFileURL)
-            let loadedHistory = try JSONDecoder().decode([ClipboardItem].self, from: data)
-            history = loadedHistory
-        } catch {
-            print("Failed to load clipboard history: \(error)")
+        guard let data = try? Data(contentsOf: historyFileURL),
+              let rawArray = try? JSONSerialization.jsonObject(with: data) as? [[String: Any]] else {
+            return
         }
+
+        history = rawArray.compactMap { ClipboardItem.fromDict($0) }
     }
 }
