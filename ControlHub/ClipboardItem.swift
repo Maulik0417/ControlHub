@@ -1,8 +1,12 @@
-//
-//  ClipboardItem.swift
-//  ControlHub
-//
-//  Created by Maulik Mann on 2025-04-29.
-//
-
 import Foundation
+
+enum ClipboardContentType: String, Codable {
+    case text
+    case fileURL
+}
+
+struct ClipboardItem: Identifiable, Codable, Hashable {
+    var id = UUID()
+    var content: String
+    var type: ClipboardContentType
+}

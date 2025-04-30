@@ -5,9 +5,6 @@ struct ClipboardView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("📋 Clipboard History")
-                .font(.title2)
-                .bold()
 
             if manager.history.isEmpty {
                 Spacer()
@@ -46,6 +43,7 @@ struct ClipboardView: View {
                     manager.clearClipboard()
                 }
                 .padding(.top)
+                .padding(.bottom, 20)
             }
         }
         .padding()
