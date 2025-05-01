@@ -1,60 +1,50 @@
 import SwiftUI
 
 struct SystemStatisticsView: View {
-    @State private var systemStats: [String: String] = [:]
-    @State private var timer: Timer?
-    
-    let systemStatsHandler = SystemStatistics()
+    @StateObject private var statsManager = SystemStatsManager()
 
     var body: some View {
-        VStack {
-            Text("System Statistics")
-                .font(.headline)
-                .padding(.bottom, 5)
-            
-            ForEach(systemStats.keys.sorted(), id: \.self) { key in
-                HStack {
-                    Text(key)
-                        .font(.subheadline)
-                    Spacer()
-                    Text(systemStats[key] ?? "Loading...")
-                        .font(.subheadline)
-                        .foregroundColor(.gray)
-                }
-                .padding(.horizontal)
-            }
+        VStack(alignment: .leading, spacing: 16) {
+            Text("📊 System Statistics")
+                .font(.title2)
+                .bold()
+
+            StatCard(title: "💾 Free Disk Space", value: String(format: "%.2f GB", statsManager.stats.freeDiskSpaceGB), color: .blue)
+
+            StatCard(title: "🧠 Used Memory", value: String(format: "%.2f MB", statsManager.stats.usedMemoryMB), color: .orange)
+
+            StatCard(title: "📦 Total Memory", value: String(format: "%.2f MB", statsManager.stats.totalMemoryMB), color: .purple)
+
+            StatCard(title: "🔥 CPU Load", value: String(format: "%.1f%%", statsManager.stats.cpuLoad), color: .red)
+
+            Spacer()
         }
         .padding()
-        .onAppear {
-            updateSystemStats()
-            startTimer()
-        }
-        .onDisappear {
-            stopTimer()
-        }
-    }
-    
-    // Update the stats every 2 seconds
-    func updateSystemStats() {
-        systemStats = systemStatsHandler.getSystemStats()
-    }
-    
-    // Start a timer to periodically update system stats
-    func startTimer() {
-        timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { _ in
-            updateSystemStats()
-        }
-    }
-    
-    // Stop the timer when the view is gone
-    func stopTimer() {
-        timer?.invalidate()
-        timer = nil
     }
 }
 
-struct SystemStatisticsView_Previews: PreviewProvider {
-    static var previews: some View {
-        SystemStatisticsView()
+struct StatCard: View {
+    let title: String
+    let value: String
+    let color: Color
+
+    var body: some View {
+        HStack {
+            VStack(alignment: .leading) {
+                Text(title)
+                    .font(.headline)
+                    .foregroundColor(.primary)
+
+                Text(value)
+                    .font(.system(size: 20, weight: .bold, design: .monospaced))
+                    .foregroundColor(color)
+            }
+
+            Spacer()
+        }
+        .padding()
+        .background(Color(NSColor.windowBackgroundColor))
+        .cornerRadius(12)
+        .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
     }
 }

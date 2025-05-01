@@ -1,87 +1,92 @@
 import Foundation
-import IOKit
-import IOKit.ps
-import SystemConfiguration
-import MachO
-import mach
+import Combine
 
+struct SystemStats {
+    var freeDiskSpaceGB: Double
+    var usedMemoryMB: Double
+    var totalMemoryMB: Double
+    var cpuLoad: Double
+}
 
-class SystemStatistics {
-    
-    // MARK: - CPU Usage
-    func getCPUUsage() -> String {
-        var cpuUsage: String = "N/A"
-        
-        // Fetch CPU statistics via sysctl
-        var mib = [CTL_HW, HW_CPU_FREQ]
-        var cpuFreq: UInt64 = 0
-        var size = MemoryLayout<UInt64>.size
-        
-        sysctl(&mib, u_int(mib.count), &cpuFreq, &size, nil, 0)
-        cpuUsage = "CPU Frequency: \(cpuFreq / 1000) MHz"
-        
-        return cpuUsage
-    }
-    
-    // MARK: - Memory Usage
-    func getMemoryUsage() -> String {
-        var info = vm_statistics_data_t()
-        var size = HOST_VM_INFO_COUNT
-        
-        let hostPort = mach_host_self()
-        let result = withUnsafeMutablePointer(to: &info) { (ptr) -> kern_return_t in
-            return host_statistics(hostPort, HOST_VM_INFO, UnsafeMutableRawPointer(ptr).assumingMemoryBound(to: integer_t.self), &size)
+class SystemStatsManager: ObservableObject {
+    @Published var stats: SystemStats = SystemStats(freeDiskSpaceGB: 0, usedMemoryMB: 0, totalMemoryMB: 0, cpuLoad: 0)
+
+    private var timer: Timer?
+
+    init() {
+        updateStats()
+        timer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: true) { _ in
+            self.updateStats()
         }
-        
-        if result == KERN_SUCCESS {
-            let usedMemory = info.active_count + info.inactive_count + info.wire_count
-            let freeMemory = info.free_count
-            return "Used Memory: \(usedMemory), Free Memory: \(freeMemory)"
-        }
-        
-        return "Memory Stats: Error"
     }
-    
-    // MARK: - GPU Usage (via IOKit)
-    func getGPUUsage() -> String {
-        // Fetching GPU stats is complex and requires either a third-party library or a custom implementation
-        // Using IOKit to get GPU information (limited to basic info)
-        let service = IOServiceGetMatchingService(kIOMainPortDefault, IOServiceMatching("IOAccelerator"))
-        if service != 0 {
-            return "GPU: Available"
-        }
-        return "GPU: Not available"
+
+    private func updateStats() {
+        stats = SystemStats(
+            freeDiskSpaceGB: getFreeDiskSpaceInGB(),
+            usedMemoryMB: getUsedMemoryInMB(),
+            totalMemoryMB: getTotalMemoryInMB(),
+            cpuLoad: getCPULoad()
+        )
     }
-    
-    // MARK: - Network Stats
-    func getNetworkStats() -> String {
-        var networkStats = "Network Stats: N/A"
-        
-        // Fetch network statistics via SystemConfiguration framework
-        let interfaces = SCNetworkInterfaceCopyAll()
-        
-        for interface in interfaces as! [SCNetworkInterface] {
-            if let name = SCNetworkInterfaceGetBSDName(interface) {
-                networkStats = "Network Interface: \(name)"
-                break
+
+    private func getFreeDiskSpaceInGB() -> Double {
+        if let attrs = try? FileManager.default.attributesOfFileSystem(forPath: "/"),
+           let freeSize = attrs[.systemFreeSize] as? NSNumber {
+            return Double(truncating: freeSize) / 1_000_000_000
+        }
+        return 0
+    }
+
+    private func getTotalMemoryInMB() -> Double {
+        Double(ProcessInfo.processInfo.physicalMemory) / 1_000_000
+    }
+
+    private func getUsedMemoryInMB() -> Double {
+        var vmStats = vm_statistics64()
+        var size = UInt32(MemoryLayout<vm_statistics64_data_t>.stride / MemoryLayout<integer_t>.stride)
+
+        let hostPort: mach_port_t = mach_host_self()
+        let HOST_VM_INFO64_COUNT = mach_msg_type_number_t(size)
+        let result = withUnsafeMutablePointer(to: &vmStats) {
+            $0.withMemoryRebound(to: integer_t.self, capacity: Int(size)) {
+                host_statistics64(hostPort, HOST_VM_INFO64, $0, &size)
             }
         }
-        
-        return networkStats
+
+        guard result == KERN_SUCCESS else { return 0 }
+
+        let pageSize = Double(vm_kernel_page_size)
+        let used = Double(vmStats.active_count + vmStats.inactive_count + vmStats.wire_count) * pageSize
+        return used / 1_000_000
     }
-    
-    // MARK: - Get All System Stats
-    func getSystemStats() -> [String: String] {
-        let cpu = getCPUUsage()
-        let memory = getMemoryUsage()
-        let gpu = getGPUUsage()
-        let network = getNetworkStats()
-        
-        return [
-            "CPU": cpu,
-            "Memory": memory,
-            "GPU": gpu,
-            "Network": network
-        ]
+
+    private func getCPULoad() -> Double {
+        var threadsList: thread_act_array_t?
+        var threadCount: mach_msg_type_number_t = 0
+        var threadInfoCount: mach_msg_type_number_t
+
+        let result = task_threads(mach_task_self_, &threadsList, &threadCount)
+        guard result == KERN_SUCCESS, let threads = threadsList else { return 0 }
+
+        var totalCPU: Double = 0
+        for i in 0..<threadCount {
+            var threadInfoData = thread_basic_info()
+            threadInfoCount = mach_msg_type_number_t(THREAD_INFO_MAX)
+
+            let kr = withUnsafeMutablePointer(to: &threadInfoData) {
+                $0.withMemoryRebound(to: integer_t.self, capacity: Int(threadInfoCount)) {
+                    thread_info(threads[Int(i)], thread_flavor_t(THREAD_BASIC_INFO), $0, &threadInfoCount)
+                }
+            }
+
+            guard kr == KERN_SUCCESS else { continue }
+
+            let threadBasicInfo = threadInfoData
+            if (threadBasicInfo.flags & TH_FLAGS_IDLE) == 0 {
+                totalCPU += Double(threadBasicInfo.cpu_usage) / Double(TH_USAGE_SCALE) * 100.0
+            }
+        }
+
+        return totalCPU
     }
 }

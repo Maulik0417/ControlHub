@@ -3,6 +3,7 @@ import SwiftUI
 enum Tool {
     case home
     case clipboard
+    case systemStats
 }
 
 struct ControlHubView: View {
@@ -15,6 +16,8 @@ struct ControlHubView: View {
                 homeView
             case .clipboard:
                 clipboardView
+            case .systemStats:
+                systemStatsView
             }
         }
         .frame(width: 300, height: 400)
@@ -41,46 +44,76 @@ struct ControlHubView: View {
             }
             .buttonStyle(PlainButtonStyle())
 
+            Button(action: {
+                selectedTool = .systemStats
+            }) {
+                HStack {
+                    Image(systemName: "gauge")
+                    Text("System Statistics")
+                }
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(Color.accentColor.opacity(0.1))
+                .cornerRadius(8)
+            }
+            .buttonStyle(PlainButtonStyle())
+
             Spacer()
         }
     }
 
     private var clipboardView: some View {
         VStack(spacing: 0) {
-            HStack {
-                Button(action: {
-                    selectedTool = .home
-                }) {
-                    Image(systemName: "chevron.left")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 12, height: 12) // Keep icon small
-                        .padding(10) // Enlarge tappable area
-                        .background(Color.clear)
-                        .contentShape(Rectangle()) // Ensures the padding area is clickable
-                }
-                .buttonStyle(PlainButtonStyle())
-
-                Spacer()
-
-                Text("📋 Clipboard Manager")
-                    .font(.headline)
-
-                Spacer()
-
-                // Balancer for layout symmetry
-                Rectangle()
-                    .foregroundColor(.clear)
-                    .frame(width: 32, height: 32)
+            toolHeader(title: "📋 Clipboard Manager") {
+                selectedTool = .home
             }
-            .padding(.horizontal)
-            .padding(.top, 20) // Increased top padding
-            .padding(.bottom, 8)
 
             Divider()
 
             ClipboardView()
                 .padding(.top, 6)
         }
+    }
+
+    private var systemStatsView: some View {
+        VStack(spacing: 0) {
+            toolHeader(title: "📊 System Statistics") {
+                selectedTool = .home
+            }
+
+            Divider()
+
+            SystemStatisticsView()
+                .padding(.top, 6)
+        }
+    }
+
+    private func toolHeader(title: String, backAction: @escaping () -> Void) -> some View {
+        HStack {
+            Button(action: backAction) {
+                Image(systemName: "chevron.left")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 12, height: 12)
+                    .padding(10)
+                    .background(Color.clear)
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(PlainButtonStyle())
+
+            Spacer()
+
+            Text(title)
+                .font(.headline)
+
+            Spacer()
+
+            Rectangle()
+                .foregroundColor(.clear)
+                .frame(width: 32, height: 32)
+        }
+        .padding(.horizontal)
+        .padding(.top, 20)
+        .padding(.bottom, 8)
     }
 }
