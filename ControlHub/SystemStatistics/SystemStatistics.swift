@@ -1,92 +1,92 @@
 import Foundation
-import Combine
+import SwiftUI
 
-struct SystemStats {
-    var freeDiskSpaceGB: Double
-    var usedMemoryMB: Double
-    var totalMemoryMB: Double
-    var cpuLoad: Double
-}
-
-class SystemStatsManager: ObservableObject {
-    @Published var stats: SystemStats = SystemStats(freeDiskSpaceGB: 0, usedMemoryMB: 0, totalMemoryMB: 0, cpuLoad: 0)
+class SystemStatisticsManager: ObservableObject {
+    @Published var freeDiskSpace: String = "Loading..."
+    @Published var memoryUsage: String = "Loading..."
+    @Published var cpuUsage: String = "Loading..."
 
     private var timer: Timer?
+    private var previousCPUTicks: host_cpu_load_info?
 
     init() {
         updateStats()
-        timer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: true) { _ in
-            self.updateStats()
+        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
+            self?.updateStats()
         }
     }
 
     private func updateStats() {
-        stats = SystemStats(
-            freeDiskSpaceGB: getFreeDiskSpaceInGB(),
-            usedMemoryMB: getUsedMemoryInMB(),
-            totalMemoryMB: getTotalMemoryInMB(),
-            cpuLoad: getCPULoad()
-        )
+        freeDiskSpace = getFreeDiskSpace()
+        memoryUsage = getMemoryUsage()
+        cpuUsage = getCPULoad()
     }
 
-    private func getFreeDiskSpaceInGB() -> Double {
-        if let attrs = try? FileManager.default.attributesOfFileSystem(forPath: "/"),
-           let freeSize = attrs[.systemFreeSize] as? NSNumber {
-            return Double(truncating: freeSize) / 1_000_000_000
-        }
-        return 0
-    }
+    private func getFreeDiskSpace() -> String {
+        let url = URL(fileURLWithPath: "/")
+        do {
+            let values = try url.resourceValues(forKeys: [
+                .volumeAvailableCapacityForImportantUsageKey,
+                .volumeAvailableCapacityKey
+            ])
+            
+            let capacity: Int64? = values.volumeAvailableCapacityForImportantUsage ??
+                                   (values.volumeAvailableCapacity != nil ? Int64(values.volumeAvailableCapacity!) : nil)
 
-    private func getTotalMemoryInMB() -> Double {
-        Double(ProcessInfo.processInfo.physicalMemory) / 1_000_000
-    }
-
-    private func getUsedMemoryInMB() -> Double {
-        var vmStats = vm_statistics64()
-        var size = UInt32(MemoryLayout<vm_statistics64_data_t>.stride / MemoryLayout<integer_t>.stride)
-
-        let hostPort: mach_port_t = mach_host_self()
-        let HOST_VM_INFO64_COUNT = mach_msg_type_number_t(size)
-        let result = withUnsafeMutablePointer(to: &vmStats) {
-            $0.withMemoryRebound(to: integer_t.self, capacity: Int(size)) {
-                host_statistics64(hostPort, HOST_VM_INFO64, $0, &size)
+            if let bytes = capacity {
+                let gb = Double(bytes) / 1_073_741_824
+                return String(format: "%.2f GB", gb)
             }
+        } catch {
+            return "N/A"
         }
-
-        guard result == KERN_SUCCESS else { return 0 }
-
-        let pageSize = Double(vm_kernel_page_size)
-        let used = Double(vmStats.active_count + vmStats.inactive_count + vmStats.wire_count) * pageSize
-        return used / 1_000_000
+        return "N/A"
     }
 
-    private func getCPULoad() -> Double {
-        var threadsList: thread_act_array_t?
-        var threadCount: mach_msg_type_number_t = 0
-        var threadInfoCount: mach_msg_type_number_t
+    private func getMemoryUsage() -> String {
+            var vmStat = vm_statistics64()
+            var count = mach_msg_type_number_t(MemoryLayout.size(ofValue: vmStat) / MemoryLayout<integer_t>.size)
 
-        let result = task_threads(mach_task_self_, &threadsList, &threadCount)
-        guard result == KERN_SUCCESS, let threads = threadsList else { return 0 }
-
-        var totalCPU: Double = 0
-        for i in 0..<threadCount {
-            var threadInfoData = thread_basic_info()
-            threadInfoCount = mach_msg_type_number_t(THREAD_INFO_MAX)
-
-            let kr = withUnsafeMutablePointer(to: &threadInfoData) {
-                $0.withMemoryRebound(to: integer_t.self, capacity: Int(threadInfoCount)) {
-                    thread_info(threads[Int(i)], thread_flavor_t(THREAD_BASIC_INFO), $0, &threadInfoCount)
+            let result = withUnsafeMutablePointer(to: &vmStat) {
+                $0.withMemoryRebound(to: integer_t.self, capacity: Int(count)) {
+                    host_statistics64(mach_host_self(), HOST_VM_INFO64, $0, &count)
                 }
             }
 
-            guard kr == KERN_SUCCESS else { continue }
+            guard result == KERN_SUCCESS else { return "N/A" }
 
-            let threadBasicInfo = threadInfoData
-            if (threadBasicInfo.flags & TH_FLAGS_IDLE) == 0 {
-                totalCPU += Double(threadBasicInfo.cpu_usage) / Double(TH_USAGE_SCALE) * 100.0
+            let used = UInt64(vmStat.active_count + vmStat.inactive_count + vmStat.wire_count) * UInt64(vm_page_size)
+            let total = ProcessInfo.processInfo.physicalMemory
+            let percent = Double(used) / Double(total) * 100
+
+            return String(format: "%.1f%%", percent)
+        }
+
+    private func getCPULoad() -> String {
+        var load = host_cpu_load_info()
+        var count = mach_msg_type_number_t(MemoryLayout<host_cpu_load_info_data_t>.stride / MemoryLayout<integer_t>.stride)
+
+        let result = withUnsafeMutablePointer(to: &load) {
+            $0.withMemoryRebound(to: integer_t.self, capacity: Int(count)) {
+                host_statistics(mach_host_self(), HOST_CPU_LOAD_INFO, $0, &count)
             }
         }
 
-        return totalCPU
+        guard result == KERN_SUCCESS else { return "N/A" }
+
+        if let previous = previousCPUTicks {
+            let userDiff = Double(load.cpu_ticks.0 - previous.cpu_ticks.0)
+            let systemDiff = Double(load.cpu_ticks.1 - previous.cpu_ticks.1)
+            let idleDiff = Double(load.cpu_ticks.2 - previous.cpu_ticks.2)
+            let niceDiff = Double(load.cpu_ticks.3 - previous.cpu_ticks.3)
+            let total = userDiff + systemDiff + idleDiff + niceDiff
+            let usage = ((userDiff + systemDiff + niceDiff) / total) * 100.0
+
+            previousCPUTicks = load
+            return String(format: "%.1f%%", usage)
+        }
+
+        previousCPUTicks = load
+        return "Calculating..."
     }
 }
