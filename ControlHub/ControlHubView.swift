@@ -4,6 +4,7 @@ enum Tool {
     case home
     case clipboard
     case systemStats
+    case quickNotes
 }
 
 struct ControlHubView: View {
@@ -18,6 +19,8 @@ struct ControlHubView: View {
                 clipboardView
             case .systemStats:
                 systemStatsView
+            case .quickNotes:
+                quickNotesView
             }
         }
         .frame(width: 300, height: 400)
@@ -58,6 +61,20 @@ struct ControlHubView: View {
             }
             .buttonStyle(PlainButtonStyle())
 
+            Button(action: {
+                selectedTool = .quickNotes
+            }) {
+                HStack {
+                    Image(systemName: "note.text")
+                    Text("Quick Notes")
+                }
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(Color.accentColor.opacity(0.1))
+                .cornerRadius(8)
+            }
+            .buttonStyle(PlainButtonStyle())
+
             Spacer()
         }
     }
@@ -84,6 +101,19 @@ struct ControlHubView: View {
             Divider()
 
             SystemStatisticsView()
+                .padding(.top, 6)
+        }
+    }
+
+    private var quickNotesView: some View {
+        VStack(spacing: 0) {
+            toolHeader(title: "📝 Quick Notes") {
+                selectedTool = .home
+            }
+
+            Divider()
+
+            QuickNotesView()
                 .padding(.top, 6)
         }
     }
