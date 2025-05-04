@@ -70,7 +70,7 @@ struct QuickNotesView: View {
     }
 
     private func styleFont() -> Font {
-        var font = Font.system(size: selectedFontSize, weight: isBold ? .bold : .regular)
+        let font = Font.system(size: selectedFontSize, weight: isBold ? .bold : .regular)
         return isItalic ? font.italic() : font
     }
 
