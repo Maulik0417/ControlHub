@@ -11,6 +11,8 @@ struct CalendarView: View {
                 Button(action: { manager.moveMonth(by: -1) }) {
                     Image(systemName: "chevron.left")
                 }
+                .focusable(false)
+                .accessibilityHidden(true)
                 .buttonStyle(BorderlessButtonStyle())
                 .padding(.horizontal, 8)
 
@@ -24,6 +26,8 @@ struct CalendarView: View {
                 Button(action: { manager.moveMonth(by: 1) }) {
                     Image(systemName: "chevron.right")
                 }
+                .focusable(false)
+                .accessibilityHidden(true)
                 .buttonStyle(BorderlessButtonStyle())
                 .padding(.horizontal, 8)
             }
