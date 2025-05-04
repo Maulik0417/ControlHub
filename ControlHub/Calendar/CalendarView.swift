@@ -1,11 +1,5 @@
 import SwiftUI
 
-struct CalendarView_Previews: PreviewProvider {
-    static var previews: some View {
-        CalendarView()
-
-    }
-}
 
 struct CalendarView: View {
     @StateObject private var manager = CalendarManager()
@@ -99,6 +93,8 @@ struct CalendarView: View {
                 .background(Color.white)
                 .cornerRadius(6)
                 .overlay(RoundedRectangle(cornerRadius: 6).stroke(Color.gray.opacity(0.2)))
+                
+                
             }
         }
         .padding(12)

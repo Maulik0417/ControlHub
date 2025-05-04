@@ -1,11 +1,11 @@
 import SwiftUI
 
-
 enum Tool {
     case home
     case clipboard
     case systemStats
     case quickNotes
+    case calendar
 }
 
 struct ControlHubView: View {
@@ -22,6 +22,8 @@ struct ControlHubView: View {
                 systemStatsView
             case .quickNotes:
                 quickNotesView
+            case .calendar:
+                calendarView
             }
         }
         .frame(width: 300, height: 400)
@@ -76,22 +78,36 @@ struct ControlHubView: View {
             }
             .buttonStyle(PlainButtonStyle())
 
-            Spacer()
-            
             Button(action: {
-                        NSApplication.shared.terminate(nil)
-                    }) {
-                        HStack {
-                            Image(systemName: "xmark.circle")
-                            Text("Quit App")
-                        }
-                        .foregroundColor(.black)
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(Color.red.opacity(0.2))
-                        .cornerRadius(8)
-                    }
-                    .buttonStyle(PlainButtonStyle())
+                selectedTool = .calendar
+            }) {
+                HStack {
+                    Image(systemName: "calendar")
+                    Text("Calendar")
+                }
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(Color.accentColor.opacity(0.1))
+                .cornerRadius(8)
+            }
+            .buttonStyle(PlainButtonStyle())
+
+            Spacer()
+
+            Button(action: {
+                NSApplication.shared.terminate(nil)
+            }) {
+                HStack {
+                    Image(systemName: "xmark.circle")
+                    Text("Quit App")
+                }
+                .foregroundColor(.black)
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(Color.red.opacity(0.2))
+                .cornerRadius(8)
+            }
+            .buttonStyle(PlainButtonStyle())
         }
     }
 
@@ -102,7 +118,6 @@ struct ControlHubView: View {
             }
 
             Divider()
-
             ClipboardView()
                 .padding(.top, 6)
         }
@@ -115,7 +130,6 @@ struct ControlHubView: View {
             }
 
             Divider()
-
             SystemStatisticsView()
                 .padding(.top, 6)
         }
@@ -128,8 +142,19 @@ struct ControlHubView: View {
             }
 
             Divider()
-
             QuickNotesView()
+                .padding(.top, 6)
+        }
+    }
+
+    private var calendarView: some View {
+        VStack(spacing: 0) {
+            toolHeader(title: "📅 Calendar") {
+                selectedTool = .home
+            }
+
+            Divider()
+            CalendarView()
                 .padding(.top, 6)
         }
     }
