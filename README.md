@@ -1,4 +1,4 @@
-# 🧭 ControlHub
+# ControlHub
 
 A macOS menu bar app combining productivity and monitoring tools to help you work smarter and stay in control — all from one compact interface. 🧠⚙️
 
