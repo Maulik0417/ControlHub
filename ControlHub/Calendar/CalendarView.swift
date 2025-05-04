@@ -1,5 +1,12 @@
 import SwiftUI
 
+struct CalendarView_Previews: PreviewProvider {
+    static var previews: some View {
+        CalendarView()
+
+    }
+}
+
 struct CalendarView: View {
     @StateObject private var manager = CalendarManager()
     private let columns = Array(repeating: GridItem(.flexible()), count: 7)
@@ -51,7 +58,7 @@ struct CalendarView: View {
                                 Text("\(Calendar.current.component(.day, from: date))")
                                     .font(.body)
                                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                    .padding(6)
+                                    .padding(1)
                                     .background(
                                         Circle()
                                             .fill(circleColor(for: date))
@@ -76,7 +83,7 @@ struct CalendarView: View {
                     dayViews[index]
                 }
             }
-            .frame(maxHeight: 240)
+            .frame(maxHeight: 160)
 
             // Notes Section
             VStack(alignment: .leading) {
@@ -88,6 +95,9 @@ struct CalendarView: View {
                     set: { manager.updateNote(for: manager.selectedDate, text: $0) }
                 ))
                 .frame(height: 60)
+                .padding(6)
+                .background(Color.white)
+                .cornerRadius(6)
                 .overlay(RoundedRectangle(cornerRadius: 6).stroke(Color.gray.opacity(0.2)))
             }
         }
