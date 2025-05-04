@@ -11,7 +11,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         popover = NSPopover()
         popover.contentSize = NSSize(width: 280, height: 360)
         popover.behavior = .transient
-//        popover.contentViewController = NSHostingController(rootView: ClipboardView())
         popover.contentViewController = NSHostingController(rootView: ControlHubView())
 
         // Create status bar item
