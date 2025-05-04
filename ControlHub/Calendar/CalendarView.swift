@@ -44,27 +44,36 @@ struct CalendarView: View {
 
             // Calendar grid
             LazyVGrid(columns: columns, spacing: 10) {
-                let days = generateDays()
-                ForEach(days, id: \.self) { date in
-                    VStack(spacing: 2) {
-                        Text("\(Calendar.current.component(.day, from: date))")
-                            .font(.body)
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            .padding(6)
-                            .background(
-                                Circle()
-                                    .fill(isToday(date) ? Color.accentColor.opacity(0.3) : Color.clear)
-                            )
-                            .onTapGesture {
-                                manager.selectedDate = date
-                            }
+                let dayViews = generateCurrentMonthDays().enumerated().map { index, date -> AnyView in
+                    if let date = date {
+                        return AnyView(
+                            VStack(spacing: 2) {
+                                Text("\(Calendar.current.component(.day, from: date))")
+                                    .font(.body)
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                    .padding(6)
+                                    .background(
+                                        Circle()
+                                            .fill(circleColor(for: date))
+                                    )
+                                    .onTapGesture {
+                                        manager.selectedDate = date
+                                    }
 
-                        if manager.hasNote(for: date) {
-                            Circle()
-                                .fill(Color.accentColor)
-                                .frame(width: 5, height: 5)
-                        }
+                                if manager.hasNote(for: date) {
+                                    Circle()
+                                        .fill(Color.accentColor)
+                                        .frame(width: 5, height: 5)
+                                }
+                            }
+                        )
+                    } else {
+                        return AnyView(Color.clear.frame(height: 30))
                     }
+                }
+
+                ForEach(0..<dayViews.count, id: \.self) { index in
+                    dayViews[index]
                 }
             }
             .frame(maxHeight: 240)
@@ -86,20 +95,41 @@ struct CalendarView: View {
         .frame(width: 300)
     }
 
-    private func isToday(_ date: Date) -> Bool {
-        Calendar.current.isDateInToday(date)
-    }
-
-    private func generateDays() -> [Date] {
+    private func generateCurrentMonthDays() -> [Date?] {
         let calendar = Calendar.current
-        guard let monthInterval = calendar.dateInterval(of: .month, for: manager.currentDate),
-              let firstWeekday = calendar.date(from: calendar.dateComponents([.year, .month], from: monthInterval.start)) else {
+        guard let monthStart = calendar.date(from: calendar.dateComponents([.year, .month], from: manager.currentDate)),
+              let range = calendar.range(of: .day, in: .month, for: manager.currentDate) else {
             return []
         }
 
-        let weekdayOffset = calendar.component(.weekday, from: firstWeekday) - calendar.firstWeekday
-        let startDate = calendar.date(byAdding: .day, value: -weekdayOffset, to: firstWeekday)!
+        var days: [Date?] = []
 
-        return (0..<42).compactMap { calendar.date(byAdding: .day, value: $0, to: startDate) }
+        // Determine what weekday the month starts on (1 = Sunday, 7 = Saturday)
+        let weekday = calendar.component(.weekday, from: monthStart)
+
+        // Add nils to pad the first row
+        let paddingDays = (weekday + 6) % 7 // Convert to 0-indexed starting from Monday
+        days.append(contentsOf: Array(repeating: nil, count: paddingDays))
+
+        // Add actual dates
+        for day in range {
+            if let date = calendar.date(byAdding: .day, value: day - 1, to: monthStart) {
+                days.append(date)
+            }
+        }
+
+        return days
+    }
+
+    private func circleColor(for date: Date) -> Color {
+        if Calendar.current.isDateInToday(date) {
+            return .green.opacity(0.4)
+        } else if Calendar.current.isDate(date, inSameDayAs: manager.selectedDate) {
+            return .blue.opacity(0.4)
+        } else {
+            return .clear
+        }
     }
 }
+
+
