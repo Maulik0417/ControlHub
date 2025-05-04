@@ -1,5 +1,11 @@
 import SwiftUI
 
+struct QuickNotesView_Previews: PreviewProvider {
+    static var previews: some View {
+        QuickNotesView()
+    }
+}
+
 struct QuickNotesView: View {
     @StateObject private var manager = QuickNotesManager()
     @State private var selectedFontSize: CGFloat = 13
@@ -9,9 +15,9 @@ struct QuickNotesView: View {
     @State private var selectedNoteIndex: Int = 0
 
     var body: some View {
-        VStack(spacing: 8) {
-            // Tab-style header
-            HStack(spacing: 8) {
+        VStack(spacing: 10) {
+            // Tab Switcher
+            HStack(spacing: 6) {
                 ForEach(0..<3, id: \.self) { index in
                     Button(action: {
                         selectedNoteIndex = index
@@ -19,13 +25,18 @@ struct QuickNotesView: View {
                     }) {
                         Text("Note \(index + 1)")
                             .font(.caption)
-                            .padding(.vertical, 4)
-                            .padding(.horizontal, 8)
-                            .background(selectedNoteIndex == index ? Color.accentColor.opacity(0.15) : Color.clear)
+                            .padding(.vertical, 5)
+                            .padding(.horizontal, 10)
+                            .background(
+                                selectedNoteIndex == index
+                                ? Color.accentColor.opacity(0.15)
+                                : Color.gray.opacity(0.5)
+                            )
+                            .foregroundColor(.primary)
                             .cornerRadius(6)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 6)
-                                    .stroke(selectedNoteIndex == index ? Color.accentColor : Color.gray.opacity(0.2), lineWidth: 1)
+                                    .stroke(selectedNoteIndex == index ? Color.accentColor : Color.gray.opacity(0.3), lineWidth: 1)
                             )
                     }
                     .buttonStyle(PlainButtonStyle())
@@ -33,52 +44,43 @@ struct QuickNotesView: View {
                 Spacer()
             }
 
-            // Display selected note
-            VStack(alignment: .leading, spacing: 4) {
+            // Editor
+            VStack(alignment: .leading, spacing: 6) {
                 ZStack(alignment: .topLeading) {
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(Color(NSColor.textBackgroundColor))
+                        .shadow(color: Color.black.opacity(0.04), radius: 1, x: 0, y: 1)
+
                     TextEditor(text: Binding(
                         get: { manager.notes[selectedNoteIndex] },
                         set: { manager.updateNote(at: selectedNoteIndex, with: $0) }
                     ))
-                    .focused($focusedNote, equals: selectedNoteIndex)
-                    .frame(height: 120)
-                    .font(styleFont())
+                    .font(.system(size: 14))
                     .foregroundColor(.primary)
-                    .background(Color(NSColor.textBackgroundColor))
-                    .cornerRadius(6)
-                    .overlay(RoundedRectangle(cornerRadius: 6).stroke(Color.gray.opacity(0.2)))
+                    .padding(8)
+                    .focused($focusedNote, equals: selectedNoteIndex)
+                    .background(Color.clear)
 
                     if manager.notes[selectedNoteIndex].isEmpty {
                         Text("Write something...")
                             .foregroundColor(.gray)
-                            .padding(6)
+                            .padding(.top, 10)
+                            .padding(.leading, 14)
                     }
                 }
+                .frame(height: 250)
 
                 Text("Last edited: \(manager.lastEdited[selectedNoteIndex], formatter: dateFormatter)")
                     .font(.caption2)
                     .foregroundColor(.secondary)
             }
 
-            Spacer(minLength: 8)
+            Spacer(minLength: 6)
 
             Divider()
 
-            // Style controls
-            HStack(spacing: 12) {
-                HStack(spacing: 4) {
-                    Text("Font Size:")
-                        .font(.caption)
-                    Stepper("", value: $selectedFontSize, in: 10...20)
-                        .labelsHidden()
-                }
-
-                toggleButton(systemName: "bold", isOn: $isBold)
-                toggleButton(systemName: "italic", isOn: $isItalic)
-            }
-            .padding(.vertical, 4)
-
-            Text("📝 Max 3 notes · Autosaved")
+            // Footer
+            Text("Max 3 notes · Autosaved")
                 .font(.caption2)
                 .foregroundColor(.secondary)
 
@@ -86,17 +88,13 @@ struct QuickNotesView: View {
                 .frame(height: 1)
                 .contentShape(Rectangle())
                 .onTapGesture {
-                    focusedNote = nil // Clear selection
+                    focusedNote = nil
                 }
         }
         .padding(12)
         .frame(width: 300)
     }
 
-    private func styleFont() -> Font {
-        let font = Font.system(size: selectedFontSize, weight: isBold ? .bold : .regular)
-        return isItalic ? font.italic() : font
-    }
 
     private func toggleButton(systemName: String, isOn: Binding<Bool>) -> some View {
         Button(action: {
@@ -106,7 +104,8 @@ struct QuickNotesView: View {
                 .foregroundColor(isOn.wrappedValue ? .accentColor : .gray)
                 .frame(width: 24, height: 24)
                 .background(Color(NSColor.controlBackgroundColor))
-                .cornerRadius(4)
+                .cornerRadius(6)
+                .shadow(color: Color.black.opacity(0.05), radius: 1, x: 0, y: 1)
         }
         .buttonStyle(PlainButtonStyle())
     }
