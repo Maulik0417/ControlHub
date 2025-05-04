@@ -1,10 +1,6 @@
 import SwiftUI
 
-struct QuickNotesView_Previews: PreviewProvider {
-    static var previews: some View {
-        QuickNotesView()
-    }
-}
+
 
 struct QuickNotesView: View {
     @StateObject private var manager = QuickNotesManager()

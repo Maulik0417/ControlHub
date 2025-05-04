@@ -1,5 +1,6 @@
 import SwiftUI
 
+
 enum Tool {
     case home
     case clipboard
@@ -76,6 +77,21 @@ struct ControlHubView: View {
             .buttonStyle(PlainButtonStyle())
 
             Spacer()
+            
+            Button(action: {
+                        NSApplication.shared.terminate(nil)
+                    }) {
+                        HStack {
+                            Image(systemName: "xmark.circle")
+                            Text("Quit App")
+                        }
+                        .foregroundColor(.black)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.red.opacity(0.2))
+                        .cornerRadius(8)
+                    }
+                    .buttonStyle(PlainButtonStyle())
         }
     }
 
