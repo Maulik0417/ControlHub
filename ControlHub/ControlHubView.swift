@@ -30,7 +30,7 @@ struct ControlHubView: View {
 
     private var homeView: some View {
         VStack(spacing: 20) {
-            Text("🛠️ ControlHub Tools")
+            Text("ControlHub")
                 .font(.title2)
                 .bold()
 
