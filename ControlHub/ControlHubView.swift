@@ -149,7 +149,7 @@ struct ControlHubView: View {
 
     private var calendarView: some View {
         VStack(spacing: 0) {
-            toolHeader(title: "📅 Calendar") {
+            toolHeader(title: "📅 Quick Calendar") {
                 selectedTool = .home
             }
 

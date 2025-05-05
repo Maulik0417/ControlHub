@@ -19,6 +19,10 @@ A macOS menu bar app combining productivity and monitoring tools to help you wor
 - Tabbed interface to switch between notes.
 - Edits tracked with timestamps.
 
+### 📝 Quick Calendar
+- A mini calendar for a quick glance.
+- Save notes for specific dates.
+
 ## 🛠 Tech Stack
 - Language: Swift, SwiftUI
 - Platform: macOS
@@ -37,6 +41,10 @@ A macOS menu bar app combining productivity and monitoring tools to help you wor
 ### Quick Notes
 - Select a note tab (1 to 3) to focus on a specific note.
 - Notes are saved instantly — no need to hit save.
+
+### 📝 Quick Calendar
+- Use the chevrons to view past or future months.
+- Right Click on a date to clear its note.
 
 ## 💡 Future Improvements
 - 🧩 Add markdown support in notes
