@@ -1,47 +1,47 @@
-import React from 'react';
+import React from "react";
 import './App.css';
 
-function App() {
+const App = () => {
+  const goToGithubRepo = () => {
+    window.location.href = "https://github.com/Maulik0417/ControlHub/releases/tag/v1.0.0";
+  };
+
   return (
-    <div className="app-container">
-      <header className="py-4 text-center text-white bg-dark">
-        <h1>ControlHub</h1>
+    <div
+      className="d-flex flex-column"
+      style={{
+        minHeight: '100vh',
+        background: 'linear-gradient(to right, #00c6ff, #0072ff)',
+      }}
+    >
+      {/* Header */}
+      <header className="bg-dark text-white text-center py-3">
+        <h1>Controlhub</h1>
       </header>
 
-      <main className="gradient-background text-white py-5">
-        <div className="container">
-          <div className="row align-items-center">
-            <div className="col-md-6 text-center text-md-start mb-4 mb-md-0">
-              <h2>Your Keyboard Shortcut Hub</h2>
-              <p className="lead">
-                ControlHub lets you bind powerful custom keyboard shortcuts to open apps and trigger actions with ease.
-              </p>
-              <a
-                className="btn btn-light btn-lg mt-3"
-                href="https://github.com/YOUR_USERNAME/YOUR_REPO/releases/latest"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                ⬇️ Download Latest
-              </a>
-            </div>
-            <div className="col-md-6 text-center">
-              <img
-                src="/app-icon.png"
-                alt="App Icon"
-                className="img-fluid app-icon"
-                style={{ maxWidth: '250px' }}
-              />
-            </div>
-          </div>
+      {/* Main Body */}
+      <div className="d-flex flex-grow-1 flex-column flex-md-row">
+        {/* App Icon First on Mobile */}
+        <div className="col-12 col-md-6 d-flex justify-content-center align-items-center p-4 order-1 order-md-2">
+          <img src="src/assets/Appicon512.png" alt="App Icon" className="img-fluid" />
         </div>
-      </main>
 
-      <footer className="text-center text-white py-3 bg-dark">
-        © {new Date().getFullYear()} ControlHub. All rights reserved.
+        {/* Description Second on Mobile */}
+        <div className="col-12 col-md-6 d-flex flex-column justify-content-center text-white p-4 order-2 order-md-1">
+          <h2>Your macOS Control Hub</h2>
+          <p>ControlHub provides Clipboard Management, System Statistics, Quick Notes, and a Calendar.</p>
+          <button className="btn btn-light mx-auto" onClick={goToGithubRepo}>
+            Go to Latest Release
+          </button>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <footer className="bg-dark text-white text-center py-2">
+        <p>&copy; 2025 ControlHub. All rights reserved.</p>
       </footer>
     </div>
   );
-}
+};
 
 export default App;
