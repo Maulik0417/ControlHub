@@ -96,6 +96,7 @@ struct CalendarView: View {
                             .padding(.horizontal, 6)
                             .padding(.vertical, 8)
                             .font(.footnote)
+                            .background(Color(NSColor.controlBackgroundColor))
                     }
 
                     TextEditor(text: Binding(
@@ -106,7 +107,7 @@ struct CalendarView: View {
                     .padding(6)
                     .opacity(manager.note(for: manager.selectedDate).isEmpty ? 0.1 : 1)
                 }
-                .background(Color.white)
+                .background(Color(NSColor.controlBackgroundColor))
                 .cornerRadius(6)
                 .overlay(
                     RoundedRectangle(cornerRadius: 6)

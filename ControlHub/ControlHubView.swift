@@ -45,7 +45,7 @@ struct ControlHubView: View {
                 }
                 .padding()
                 .frame(maxWidth: .infinity)
-                .background(Color.accentColor.opacity(0.5))
+                .background(Color.accentColor.opacity(0.7))
                 .cornerRadius(8)
             }
             .buttonStyle(PlainButtonStyle())
@@ -59,7 +59,7 @@ struct ControlHubView: View {
                 }
                 .padding()
                 .frame(maxWidth: .infinity)
-                .background(Color.accentColor.opacity(0.5))
+                .background(Color.accentColor.opacity(0.7))
                 .cornerRadius(8)
             }
             .buttonStyle(PlainButtonStyle())
@@ -73,7 +73,7 @@ struct ControlHubView: View {
                 }
                 .padding()
                 .frame(maxWidth: .infinity)
-                .background(Color.accentColor.opacity(0.5))
+                .background(Color.accentColor.opacity(0.7))
                 .cornerRadius(8)
             }
             .buttonStyle(PlainButtonStyle())
@@ -87,7 +87,7 @@ struct ControlHubView: View {
                 }
                 .padding()
                 .frame(maxWidth: .infinity)
-                .background(Color.accentColor.opacity(0.5))
+                .background(Color.accentColor.opacity(0.7))
                 .cornerRadius(8)
             }
             .buttonStyle(PlainButtonStyle())
@@ -104,7 +104,7 @@ struct ControlHubView: View {
                 .foregroundColor(.black)
                 .padding()
                 .frame(maxWidth: .infinity)
-                .background(Color.red.opacity(0.5))
+                .background(Color.red.opacity(0.7))
                 .cornerRadius(8)
             }
             .buttonStyle(PlainButtonStyle())
