@@ -51,7 +51,7 @@ struct CalendarView: View {
                                 Text("\(Calendar.current.component(.day, from: date))")
                                     .font(.body)
                                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                    .padding(1)
+                                    .padding(6)
                                     .background(
                                         Circle()
                                             .fill(circleColor(for: date))
@@ -82,7 +82,7 @@ struct CalendarView: View {
                     dayViews[index]
                 }
             }
-            .frame(maxHeight: 160)
+            .frame(maxHeight: 220)
 
             // Notes Section
             VStack(alignment: .leading) {
@@ -91,7 +91,7 @@ struct CalendarView: View {
             
                 ZStack(alignment: .topLeading) {
                     if manager.note(for: manager.selectedDate).isEmpty {
-                        Text("Write something here... Right click on the date to clear note")
+                        Text("Start Typing... Right Click on the Date to Clear Note")
                             .foregroundColor(.gray)
                             .padding(.horizontal, 6)
                             .padding(.vertical, 8)
