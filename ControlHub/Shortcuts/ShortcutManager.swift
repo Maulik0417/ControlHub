@@ -1,60 +1,62 @@
 import Foundation
 import AppKit
 import Carbon.HIToolbox
+import ApplicationServices
 
 class ShortcutManager {
     static let shared = ShortcutManager()
     
-    private var monitor: Any?
-    private var hyperKeyIsActive = false
+    private var eventTap: CFMachPort?
 
     private init() {
         requestAccessibilityPermission()
-        startMonitoring()
+        startEventTap()
     }
 
-    func startMonitoring() {
-        monitor = NSEvent.addGlobalMonitorForEvents(matching: .keyDown) { [weak self] event in
-            self?.handle(event)
+    private func startEventTap() {
+        let mask = (1 << CGEventType.keyDown.rawValue)
+
+        guard let eventTap = CGEvent.tapCreate(
+            tap: .cgSessionEventTap,
+            place: .headInsertEventTap,
+            options: .defaultTap,
+            eventsOfInterest: CGEventMask(mask),
+            callback: { _, type, event, _ in
+                guard type == .keyDown else { return Unmanaged.passUnretained(event) }
+
+                let keyCode = event.getIntegerValueField(.keyboardEventKeycode)
+                let flags = event.flags
+
+                let hyperKeyComboActive = flags.contains([.maskCommand, .maskControl, .maskAlternate, .maskSecondaryFn])
+
+                if hyperKeyComboActive {
+                    print("🔐 Hyper key + \(keyCode)")
+
+                    switch keyCode {
+                    case 18: // 1
+                        ShortcutManager.launchApp(bundleIdentifier: "com.apple.Notes")
+                    case 19: // 2
+                        ShortcutManager.launchApp(bundleIdentifier: "com.apple.Safari")
+                    default:
+                        break
+                    }
+                }
+
+                return Unmanaged.passUnretained(event)
+            },
+            userInfo: nil
+        ) else {
+            print("❌ Failed to create event tap. Make sure accessibility permissions are granted.")
+            return
         }
+
+        self.eventTap = eventTap
+        let runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0)
+        CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, .commonModes)
+        CGEvent.tapEnable(tap: eventTap, enable: true)
     }
 
-    func stopMonitoring() {
-        if let monitor = monitor {
-            NSEvent.removeMonitor(monitor)
-        }
-    }
-
-    private func handle(_ event: NSEvent) {
-        let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
-
-        // fn is not part of modifierFlags; use a workaround
-        let fnIsPressed = CGEvent(source: nil)?.flags.contains(.maskSecondaryFn) ?? false
-
-        let hyperKeyComboActive = flags.contains([.control, .option, .command]) && fnIsPressed
-
-        if hyperKeyComboActive {
-            hyperKeyIsActive = true
-        }
-
-        if hyperKeyIsActive {
-            switch event.keyCode {
-            case 18: // key "1"
-                openApp(bundleIdentifier: "com.apple.Notes") // Example
-            case 19: // key "2"
-                openApp(bundleIdentifier: "com.apple.Safari")
-            default:
-                break
-            }
-        }
-
-        // Reset state if key is released (optional)
-        if event.type == .keyUp {
-            hyperKeyIsActive = false
-        }
-    }
-
-    private func openApp(bundleIdentifier: String) {
+    static func launchApp(bundleIdentifier: String) {
         guard let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleIdentifier) else {
             print("❌ Could not find app with bundle identifier: \(bundleIdentifier)")
             return
