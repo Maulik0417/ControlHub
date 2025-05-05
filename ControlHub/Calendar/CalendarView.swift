@@ -1,6 +1,5 @@
 import SwiftUI
 
-
 struct CalendarView: View {
     @StateObject private var manager = CalendarManager()
     private let columns = Array(repeating: GridItem(.flexible()), count: 7)
@@ -60,6 +59,12 @@ struct CalendarView: View {
                                     .onTapGesture {
                                         manager.selectedDate = date
                                     }
+                                            .contextMenu {
+                                                Button("Clear Note") {
+                                                    manager.updateNote(for: date, text: "")
+                                                }
+                                            
+                                    }
 
                                 if manager.hasNote(for: date) {
                                     Circle()
@@ -83,16 +88,30 @@ struct CalendarView: View {
             VStack(alignment: .leading) {
                 Text("Note for \(manager.dateKey(from: manager.selectedDate)):")
                     .font(.caption)
+            
+                ZStack(alignment: .topLeading) {
+                    if manager.note(for: manager.selectedDate).isEmpty {
+                        Text("Write something here... Right click on the date to clear note")
+                            .foregroundColor(.gray)
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 8)
+                            .font(.footnote)
+                    }
 
-                TextEditor(text: Binding(
-                    get: { manager.note(for: manager.selectedDate) },
-                    set: { manager.updateNote(for: manager.selectedDate, text: $0) }
-                ))
-                .frame(height: 60)
-                .padding(6)
+                    TextEditor(text: Binding(
+                        get: { manager.note(for: manager.selectedDate) },
+                        set: { manager.updateNote(for: manager.selectedDate, text: $0) }
+                    ))
+                    .frame(height: 60)
+                    .padding(6)
+                    .opacity(manager.note(for: manager.selectedDate).isEmpty ? 0.1 : 1)
+                }
                 .background(Color.white)
                 .cornerRadius(6)
-                .overlay(RoundedRectangle(cornerRadius: 6).stroke(Color.gray.opacity(0.2)))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 6)
+                        .stroke(Color.gray.opacity(0.2))
+                )
                 
                 
             }
