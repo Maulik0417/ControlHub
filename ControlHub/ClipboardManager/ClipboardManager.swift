@@ -61,6 +61,7 @@ enum ClipboardItem: Hashable {
 
 class ClipboardManager: ObservableObject {
     @Published var history: [ClipboardItem] = []
+    static let shared = ClipboardManager()
 
     private let pasteboard = NSPasteboard.general
     private var lastItem: ClipboardItem?

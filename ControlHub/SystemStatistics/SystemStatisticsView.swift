@@ -31,7 +31,7 @@ struct SystemStatisticsView: View {
 
             Text("*Accurate within 5%")
                 .font(.footnote)
-                .foregroundColor(Color.blue)
+                .foregroundColor(Color.gray)
                 .padding(.top, 8)
         }
         .padding()
@@ -46,7 +46,7 @@ struct SystemStatisticsView: View {
 
             VStack(alignment: .leading) {
                 Text(title)
-                    .font(.subheadline)
+                   .font(.subheadline)
                     .foregroundColor(Color.blue)
                     
                     
@@ -57,13 +57,16 @@ struct SystemStatisticsView: View {
 
             Spacer()
         }
-        .padding()
+        .padding(22)
         .background(
             RoundedRectangle(cornerRadius: 12)
                 .fill(Color(NSColor.controlBackgroundColor))
                 .shadow(color: Color.black.opacity(0.05), radius: 4, x: 0, y: 2)
         )
+
     }
+    
+
 
     // MARK: - Color logic helpers
 

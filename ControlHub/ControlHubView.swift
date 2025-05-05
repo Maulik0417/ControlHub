@@ -10,7 +10,9 @@ enum Tool {
 
 struct ControlHubView: View {
     @State private var selectedTool: Tool = .home
-
+   
+    
+        
     var body: some View {
         Group {
             switch selectedTool {
@@ -31,6 +33,8 @@ struct ControlHubView: View {
     }
 
     private var homeView: some View {
+        
+        
         VStack(spacing: 20) {
             Text("ControlHub")
                 .font(.title2)

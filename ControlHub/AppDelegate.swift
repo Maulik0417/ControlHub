@@ -8,6 +8,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         // Create the popover with SwiftUI content
+        _ = ClipboardManager.shared
+        _ = ShortcutManager.shared
         popover = NSPopover()
         popover.contentSize = NSSize(width: 280, height: 360)
         popover.behavior = .transient

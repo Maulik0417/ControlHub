@@ -55,10 +55,13 @@ class ShortcutManager {
     }
 
     private func openApp(bundleIdentifier: String) {
-        NSWorkspace.shared.launchApplication(withBundleIdentifier: bundleIdentifier,
-                                             options: [.default],
-                                             additionalEventParamDescriptor: nil,
-                                             launchIdentifier: nil)
+        guard let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleIdentifier) else {
+            print("❌ Could not find app with bundle identifier: \(bundleIdentifier)")
+            return
+        }
+
+        let config = NSWorkspace.OpenConfiguration()
+        NSWorkspace.shared.openApplication(at: url, configuration: config, completionHandler: nil)
     }
 
     private func requestAccessibilityPermission() {
