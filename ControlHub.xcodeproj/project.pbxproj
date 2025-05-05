@@ -6,10 +6,6 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		4D0443AD2DC862DB009C03C5 /* Property List.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4D0443AC2DC862DB009C03C5 /* Property List.plist */; };
-/* End PBXBuildFile section */
-
 /* Begin PBXContainerItemProxy section */
 		4DAE46742DC1707800C91E48 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -28,7 +24,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		4D0443AC2DC862DB009C03C5 /* Property List.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Property List.plist"; sourceTree = "<group>"; };
 		4DAE46652DC1707700C91E48 /* ControlHub.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ControlHub.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4DAE46732DC1707800C91E48 /* ControlHubTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ControlHubTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4DAE467D2DC1707800C91E48 /* ControlHubUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ControlHubUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -80,7 +75,6 @@
 		4DAE465C2DC1707700C91E48 = {
 			isa = PBXGroup;
 			children = (
-				4D0443AC2DC862DB009C03C5 /* Property List.plist */,
 				4DAE46672DC1707700C91E48 /* ControlHub */,
 				4DAE46762DC1707800C91E48 /* ControlHubTests */,
 				4DAE46802DC1707800C91E48 /* ControlHubUITests */,
@@ -218,7 +212,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4D0443AD2DC862DB009C03C5 /* Property List.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
